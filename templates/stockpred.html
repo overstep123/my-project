@@ -1,0 +1,33 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-1">股票代码</div>
+        <div class="col-2">日期</div>
+    </div>
+    <div id="buyIn" style="display: none">
+            this is buy in div.
+            <form class="row" action="/stockpred" method="post">
+                <span class>股票代码</span><input class="col-1" readonly id="subID">
+                <span>日期</span><input class="col-2" readonly id="subDate">
+                <input class="col-2" type="number">
+                <input type="submit" class="btn btn-primary col-1" onclick="popinbuy()">
+            </form>
+    </div>
+        {% for sp in sps %}
+    <form class="row" action="/stockpred" method="post">
+        {% csrf_token %}
+        <input class="col-1" readonly value="{{ sp.code }}" name="code"></input>
+        <input class="col-2" readonly value="{{ sp.date|date:"Y-m-d" }}" name="date"></input>
+        <input class="col-1" readonly value="{{ sp.stockname }}"></input>
+        <input class="col-1" readonly value="{{ sp.open }}"></input>
+        <input class="col-1" readonly value="{{ sp.close }}"></input>
+        <input class="col-1" readonly value="{{ sp.high }}"></input>
+        <input class="col-1" readonly value="{{ sp.low }}"></input>
+        <input class="col-1 btn btn-warn" type="submit" value="关注">
+    </form>
+    {% endfor %}
+    </div>
+{% endblock %}

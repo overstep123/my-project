@@ -1,0 +1,33 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+
+
+<form class="site-form" action="/stockprice"method="post">
+    {% csrf_token %}
+    <input type="text" name="code">
+    <input type="date" name="date">
+    <input type="submit"value="提交">
+</form>
+    <div class="container">
+    <div class="row">
+        <div class="col-1">股票代码</div>
+        <div class="col-1">股票名称</div>
+        <div class="col-2">日期</div>
+        <div class="col-1">开盘价</div>
+        <div class="col-1">收盘价</div>
+        <div class="col-1">最高价</div>
+        <div class="col-1">最低价</div>
+    </div>
+        {% for sp in sps %}
+    <div class="row">
+        <div class="col-1">{{ sp.code }}</div>
+        <div class="col-1">{{ sp.stockname }}</div>
+        <div class="col-2">{{ sp.date }}</div>
+        <div class="col-1">{{ sp.open }}</div>
+        <div class="col-1">{{ sp.close }}</div>
+        <div class="col-1">{{ sp.high }}</div>
+        <div class="col-1">{{ sp.low }}</div>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}

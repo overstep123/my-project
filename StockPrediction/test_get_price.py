@@ -6,7 +6,7 @@ import http.client, urllib
 import os
 d1 = dt.datetime.now()
 def get_price(date_start,date_end,bar,count):
-    engine = create_engine('mysql://kevin:@127.0.0.1/Stock?charset=utf8') # 123.206.69.99 server
+    engine = create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
  # 获取股价 已经使用完毕 禁止更改
 
 
@@ -17,7 +17,8 @@ def get_price(date_start,date_end,bar,count):
     for i in stock_list:
         counter += 1
         # print(i)
-        df = ts.get_k_data(i, ktype='D',start=date_start,end=date_end)
+        # df = ts.get_k_data(i, ktype='D',start=date_start,end=date_end)
+        df = ts.get_k_data(i, ktype='D')
         if(df is None):# 异常情况数据为空
             print("name: "+i)
         else:

@@ -5,9 +5,10 @@ import tensorflow as tf
 import sqlalchemy as sa
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot    as plt
 
-def test_classfier(date_after,bar,count,train_times):
+
+def test_classfier(date_after, bar, count, train_times):
     d1 = dt.datetime.now()
 
     train_count = train_times # 训练次数
@@ -26,7 +27,7 @@ def test_classfier(date_after,bar,count,train_times):
 
 
     # 数据获取
-    engine = sa.create_engine('mysql://root:root@localhost/Stock?charset=utf8')
+    engine = sa.create_engine('mysql://root:root@localhost/stocktool?charset=utf8')
     # sql_train_true      = "SELECT open,close,high,low FROM stock_label_true WHERE date >= '2016-01-01' AND date < '2017-01-01';"
     # sql_train_false     = "SELECT open,close,high,low FROM stock_label_false WHERE date >='2016-01-01' AND date < '2017-01-01';"
     # sql_varify_true     = "SELECT open,close,high,low FROM stock_label_true WHERE date >='2017-01-01';"

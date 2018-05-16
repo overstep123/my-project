@@ -22,5 +22,9 @@ urlpatterns = [
     path('logout',views.log_out),
     path('index', views.index),
     path('user_index', views.user_index),
+    path('mana',views.mana),
+    path('stockprice',views.stockprice),
+    path('stockpred',views.stockpred),
+    path('userfollow',views.userfollow),
     path('admin/', admin.site.urls)
 ]
