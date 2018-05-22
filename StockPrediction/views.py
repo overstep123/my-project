@@ -7,6 +7,7 @@ from StockPrediction import models
 import sqlalchemy as sa
 import pandas as pd
 from django.utils import timezone
+from django.db import connection
 def index(req):
     t = 'ABVC'
     return render(req, 'index.html', {'t': t})
@@ -58,29 +59,53 @@ def mana(req):
     else:
         return redirect('/login',{'msg':'请先登录'})
 def stockprice(req):
+    url = 'stockprice'
     if req.user.is_authenticated:
-        print(1)
+        msg = '';
         if req.method == 'POST':
             code = req.POST['code']
             date = req.POST['date']
-            sps = models.stock_price.objects.filter(code=code,date=date)
+            if (code == '' and date == ''):
+                msg = '请输入想要查询的股票及日期'
+                sps = None
+            else:
+                if(code !='' and date != ''):
+                    sps = models.stock_price.objects.filter(code=code,date=date)
+                elif (code != ''):
+                    sps = models.stock_price.objects.filter(code=code).order_by('-date')
+                else:
+                    sps = models.stock_price.objects.filter(date=date)
+                if sps.count() == 0:
+                    msg = '没有此股票行情数据，请重新进行查询！'
         else:
             sps = None
-        return render(req,'stockprice.html',{'sps':sps,'username':req.user.username})
+        return render(req,'stockprice.html',{'sps':sps,'username':req.user.username,'msg':msg,'url':url})
     else:
 
         form = AuthenticationForm()
         return render(req,'login.html',{'form':form,'msg':'请先登录'})
         # return redirect('/login', {'msg':msg})
 def stockpred(req):
+    url = 'stockpred'
     if req.user.is_authenticated:
-        if req.method == 'POST':
-            print(req.POST['code'])
-            print(req.POST['date'])
-            price = models.stock_price.objects.filter(code=req.POST['code'],date=req.POST['date'])[0].open
-            models.user_follow.objects.create(buy_date=req.POST['date'],code=req.POST['code'],username=req.user.username,buy_price=price)
-        sps = models.stock_pred.objects.filter(down=True,macdh__range=(0.8,99),date__range=(timezone.now()+timedelta(days=-7),timezone.now())).order_by('-date')
-        return render(req,'stockpred.html',{'sps':sps,'username':req.user.username})
+        cur = connection.cursor()
+        sps = models.stock_pred.objects.filter(down=True,date__range=(timezone.now()+timedelta(days=-15),timezone.now())).exclude(macdh__lt=0.6,macdh__gt=-1.2).exclude(macdh=None).order_by('-date')
+        for sp in sps:
+            cur.execute("""select open from stockprediction_stock_pred where code =%s and date > %s order by date asc""",[sp.code,sp.date])
+            row = cur.fetchone()
+            if row == None:
+                sp.hopeopen = '-'
+            else:
+                sp.hopeopen = row[0]
+                sp.hopesale = float(sp.hopeopen)*1.08
+                # print(sp.hopeopen)
+            # sp.hig
+            sp.close = models.stock_pred.objects.filter(code=sp.code).order_by('-date')[0].close
+            if(sp.hopeopen == '-'):
+                sp.chg = '-'
+            else:
+                sp.chg = float(sp.close)/float(sp.hopeopen) - 1
+        return render(req,'stockpred.html',{'sps':sps,'username':req.user.username,'url':url})
     else:
         form = AuthenticationForm()
         return render(req,'login.html',{'form':form,'msg':'请先登录'})
