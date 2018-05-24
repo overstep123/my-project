@@ -24,48 +24,51 @@ def test_feature(date_after,bar,count):
     for i in stock_list:
         counter += 1
         # print(str(counter)+"\t"+i)
-        sql_price = "SELECT * FROM stockprediction_stock_price WHERE code = "+i+" ORDER BY date;"
+        sql_price = "SELECT * FROM stockprediction_stock_price WHERE code = "+i+" and date > '2018-01-01' ORDER BY date;"
         price_data = pd.read_sql(sql_price,engine)
-        macd,macds,price_data['macdh']      =ta.MACD(price_data['close'].values, fastperiod=12, slowperiod=26, signalperiod=9)
-        # price_data['upperBB'],price_data['midBB'],price_data['lowBB']   =ta.BBANDS(price_data['close'].values)
-        price_data['stoK'],price_data['stoD']                           =ta.STOCH(price_data['high'].values,price_data['low'].values,price_data['close'].values)
-        price_data['rsi']                                               =ta.RSI(price_data['close'].values)
-        # price_data['atr']                                               =ta.ATR(price_data['high'].values,price_data['low'].values,price_data['close'].values)
-        price_data['willR']                                             =ta.WILLR(price_data['high'].values,price_data['low'].values,price_data['close'].values)
-        # price_data['trix']                                              =ta.TRIX(price_data['close'].values)
-        price_data['ultosc']                                            =ta.ULTOSC(price_data['high'].values,price_data['low'].values,price_data['close'].values)
-        # price_data['storsiK'],price_data['storsiD']                     =ta.STOCHRSI(price_data['close'].values)
-        # price_data['roc']                                               =ta.ROC(price_data['close'].values)
-        # price_data['rocp']                                              =ta.ROCP(price_data['close'].values)
-        # price_data['rocr']                                              =ta.ROCR(price_data['close'].values)
-        # price_data['rocr100']                                           =ta.ROCR100(price_data['close'].values)
-        price_data['mfi']                                               =ta.MFI(price_data['high'].values,price_data['low'].values,price_data['close'].values,price_data['volume'].values)
-        # price_data.pop('level_0')
-        # price_data.pop('index')
-        # print(price_data[price_data.date<'2018-04-16'])
-        # price_data[price_data.date>=date_after].to_sql('stockprediction_stock_pred',engine,if_exists='append',index=False)
-        price_data.pop('id')
+        if(price_data.empty):
+            print(i)
+        else:
+            macd,macds,price_data['macdh']      =ta.MACD(price_data['close'].values, fastperiod=12, slowperiod=26, signalperiod=9)
+            # price_data['upperBB'],price_data['midBB'],price_data['lowBB']   =ta.BBANDS(price_data['close'].values)
+            price_data['stoK'],price_data['stoD']                           =ta.STOCH(price_data['high'].values,price_data['low'].values,price_data['close'].values)
+            price_data['rsi']                                               =ta.RSI(price_data['close'].values)
+            # price_data['atr']                                               =ta.ATR(price_data['high'].values,price_data['low'].values,price_data['close'].values)
+            price_data['willR']                                             =ta.WILLR(price_data['high'].values,price_data['low'].values,price_data['close'].values)
+            # price_data['trix']                                              =ta.TRIX(price_data['close'].values)
+            price_data['ultosc']                                            =ta.ULTOSC(price_data['high'].values,price_data['low'].values,price_data['close'].values)
+            # price_data['storsiK'],price_data['storsiD']                     =ta.STOCHRSI(price_data['close'].values)
+            # price_data['roc']                                               =ta.ROC(price_data['close'].values)
+            # price_data['rocp']                                              =ta.ROCP(price_data['close'].values)
+            # price_data['rocr']                                              =ta.ROCR(price_data['close'].values)
+            # price_data['rocr100']                                           =ta.ROCR100(price_data['close'].values)
+            price_data['mfi']                                               =ta.MFI(price_data['high'].values,price_data['low'].values,price_data['close'].values,price_data['volume'].values)
+            # price_data.pop('level_0')
+            # price_data.pop('index')
+            # print(price_data[price_data.date<'2018-04-16'])
+            # price_data[price_data.date>=date_after].to_sql('stockprediction_stock_pred',engine,if_exists='append',index=False)
+            price_data.pop('id')
 
-        """ is down"""
+            """ is down"""
 
-        iD = pd.DataFrame(np.zeros((price_data.shape[0], 1)), columns=['down'])
-        iD['down'] = False
-        row_number = price_data.shape[0]
+            iD = pd.DataFrame(np.zeros((price_data.shape[0], 1)), columns=['down'])
+            iD['down'] = False
+            row_number = price_data.shape[0]
 
-        for j in range(0,row_number):
-            if(j<2):
-                continue
-            elif(price_data.iloc[j-2].high*0.95>price_data.iloc[j].open):
-                iD.iloc[j].down = True
-            else:
-                continue
-        price_data.insert(price_data.shape[1],'down',iD)
-        """ end down"""
+            for j in range(0,row_number):
+                if(j<2):
+                    continue
+                elif(price_data.iloc[j-2].high*0.95>price_data.iloc[j].open):
+                    iD.iloc[j].down = True
+                else:
+                    continue
+            price_data.insert(price_data.shape[1],'down',iD)
+            """ end down"""
 
 
-        price_data[price_data.date>=dt.datetime.strptime(date_after,'%Y-%m-%d').date()].to_sql('stockprediction_stock_pred',engine,if_exists='append',index=False)
-        # print(counter)
-        bar.update(count+counter)
+            price_data[price_data.date>=dt.datetime.strptime(date_after,'%Y-%m-%d').date()].to_sql('stockprediction_stock_pred',engine,if_exists='append',index=False)
+            # print(counter)
+            bar.update(count+counter)
         # price_data.to_sql('stock_price_test_allfeature',engine,if_exists='append')
         # print(price_data)
     # macd=ta.MACD(price_data['close'].values, fastperiod=12, slowperiod=26, signalperiod=9)

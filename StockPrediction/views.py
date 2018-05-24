@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,logout
 from datetime import timedelta,date
+import datetime as dt
 # Create your views here.
 from StockPrediction import models
 import sqlalchemy as sa
 import pandas as pd
 from django.utils import timezone
 from django.db import connection
+from django.http import JsonResponse
+import json
+class winrate:
+    date = ''
+    rate = ''
 def index(req):
     t = 'ABVC'
     return render(req, 'index.html', {'t': t})
@@ -129,3 +135,33 @@ def userfollow(req):
         # print(i.high)
     # i.models.user_follow.objects.all()
     return render(req,'userfollow.html',{'username':req.user.username,'ufs':ufs})
+
+def predanal(req):
+    url='predanal'
+    pas = None
+    pas = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01').order_by('-buydate')
+    return render(req,'predanal.html',{'username':req.user.username,'pas':pas,'url':url})
+
+def winrate_ajax(req):
+    wrs = []
+    dates = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01').distinct().values('buydate').order_by('-buydate')
+    total_win_count=0
+    total_lose_count=0
+    for date in dates:
+        date_str = date['buydate'].strftime('%Y-%m-%d')
+        win_count = models.pred_anal_macdh.objects.filter(buydate=date_str, chg__gt=1.08).count()
+        lose_count = models.pred_anal_macdh.objects.filter(buydate=date_str).exclude(chg__gt=1.08).count()
+        rate = win_count/(win_count+lose_count)
+        wrs.append([date_str,rate])
+        total_win_count +=win_count
+        total_lose_count +=lose_count
+    print(total_win_count,total_lose_count)
+    return JsonResponse(wrs,safe=False)
+def total_wr_ajax(req):
+    wrs = []
+    win = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__gt=1.075).count()
+    lose = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__lt=1.075).count()
+    wrs.append({'value':win,'name':'预测成功' })
+    wrs.append({'value':lose,'name':'预测失败' })
+    print(win,lose)
+    return JsonResponse(wrs,safe=False)

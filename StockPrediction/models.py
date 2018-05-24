@@ -51,3 +51,27 @@ class user_follow(models.Model):
     sale_date = models.DateField(null=True)
     class Meta:
         unique_together=('code','username','buy_date')
+
+class pred_anal(models.Model):
+    code = models.CharField(max_length=6)
+    stockname = models.CharField(max_length=6,null=True)
+    hopeopen = models.DecimalField(decimal_places=15,max_digits=30,null=True)
+    hopesale = models.DecimalField(decimal_places=15,max_digits=30,null=True)
+    buydate = models.DateField()
+    high = models.DecimalField(decimal_places=15,max_digits=20,null=True)
+    highdate = models.DateField()
+    chg = models.DecimalField(decimal_places=15,max_digits=20,null=True)
+    class Meta:
+        unique_together=('code','buydate')
+
+class pred_anal_macdh(models.Model):
+    code = models.CharField(max_length=6)
+    stockname = models.CharField(max_length=6,null=True)
+    hopeopen = models.DecimalField(decimal_places=15,max_digits=30,null=True)
+    hopesale = models.DecimalField(decimal_places=15,max_digits=30,null=True)
+    buydate = models.DateField()
+    high = models.DecimalField(decimal_places=15,max_digits=20,null=True)
+    highdate = models.DateField()
+    chg = models.DecimalField(decimal_places=15,max_digits=20,null=True)
+    class Meta:
+        unique_together=('code','buydate')

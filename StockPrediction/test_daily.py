@@ -25,7 +25,7 @@ feature_num = feature_num_df.iloc[0,0]
 down_num = down_num_df.iloc[0,0]
 """
 # today = dt.datetime.today().strftime('%Y-%m-%d')
-today = '2018-05-18'
+today = '2018-05-17'
 print(today)
 if(ts.is_holiday(today)):
     # print('yes')
@@ -43,7 +43,7 @@ else:
     # with progressbar.ProgressBar(max_value=price_num+feature_num+down_num+1,redirect_stdout=True) as bar:
     with progressbar.ProgressBar(max_value=price_num+feature_num+down_num+1+train_times,redirect_stdout=True) as bar:
         # test_get_price.get_price(start_date,end_date,bar,count)
-        price_data_migration.get_price(today,bar,count)
+        # price_data_migration.get_price(today,bar,count)
 
         print('get_price finished')
         # count = count+int(price_num)

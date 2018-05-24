@@ -15,12 +15,12 @@ def get_price(today,bar,count):
     stock_list = stock_s.tolist()
     # counter = 0
     for i in stock_list:
-        print(i)
+        # print(i)
         # counter += 1
         # print(i)
         # df = ts.get_k_data(i, ktype='D',start=date_start,end=date_end)
-        df = ts.get_k_data(i, ktype='D',start=today,end=today)
-        print(df)
+        df = ts.get_k_data(i, ktype='D',start=today)
+        # print(df)
         if(df.empty):# 异常情况数据为空
             print("name: "+i)
         else:

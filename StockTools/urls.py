@@ -25,6 +25,9 @@ urlpatterns = [
     path('mana',views.mana),
     path('stockprice',views.stockprice),
     path('stockpred',views.stockpred),
-    path('userfollow',views.userfollow),
-    path('admin/', admin.site.urls)
+    path('predanal',views.predanal),
+    # path('userfollow',views.userfollow),
+    path('admin/', admin.site.urls),
+    path('winrate',views.winrate_ajax),
+    path('total_wr',views.total_wr_ajax)
 ]

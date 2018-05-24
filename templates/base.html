@@ -18,6 +18,7 @@
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
      <!-- TABLE STYLES-->
     <link href="{% static 'assets/js/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.common.min.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -61,7 +62,7 @@
                         <a href="stockpred" class=" {% if url == 'stockpred' %}active-menu{% endif %}"><i class="fa fa-table"></i> 预测结果查询</a>
                     </li>
 					<li>
-                        <a href="stockanal"class=" {% if url == 'stockprice' %}active-menu{% endif %}"><i class="fa fa-bar-chart-o"></i> 预测结果分析</a>
+                        <a href="predanal"class=" {% if url == 'predanal' %}active-menu{% endif %}"><i class="fa fa-bar-chart-o"></i> 预测结果分析</a>
                     </li>
                 </ul>
 
@@ -70,27 +71,6 @@
         </nav>
         <!-- /. NAV SIDE  -->
         {% block content %}
-        {% endblock %}
-    </div>
-     <!-- /. WRAPPER  -->
-    <!-- JS Scripts-->
-    <!-- jQuery Js -->
-    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
-      <!-- Bootstrap Js -->
-    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
-    <!-- Metis Menu Js -->
-    <script src="{% static 'assets/js/jquery.metisMenu.js' %}"></script>
-     <!-- DATA TABLE SCRIPTS -->
-    <script src="{% static 'assets/js/dataTables/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'assets/js/dataTables/dataTables.bootstrap.js' %}"></script>
-        <script>
-            $(document).ready(function () {
-                $('#dataTables-example').dataTable();
-            });
-    </script>
-         <!-- Custom Js -->
-    <script src="{% static 'assets/js/custom-scripts.js' %}"></script>
-
-
+{% endblock %}
 </body>
 </html>
