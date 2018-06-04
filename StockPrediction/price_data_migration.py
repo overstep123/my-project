@@ -5,7 +5,7 @@ import pandas as pd
 import http.client, urllib
 import os
 d1 = dt.datetime.now()
-def get_price(today,bar,count):
+def get_price(start_date,bar,count):
     engine = create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
      # 获取股价 已经使用完毕 禁止更改
 
@@ -19,7 +19,7 @@ def get_price(today,bar,count):
         # counter += 1
         # print(i)
         # df = ts.get_k_data(i, ktype='D',start=date_start,end=date_end)
-        df = ts.get_k_data(i, ktype='D',start=today)
+        df = ts.get_k_data(i, ktype='D',start=start_date)
         # print(df)
         if(df.empty):# 异常情况数据为空
             print("name: "+i)

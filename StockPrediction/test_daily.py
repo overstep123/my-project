@@ -25,7 +25,8 @@ feature_num = feature_num_df.iloc[0,0]
 down_num = down_num_df.iloc[0,0]
 """
 # today = dt.datetime.today().strftime('%Y-%m-%d')
-today = '2018-05-17'
+# today = '2018-05-17'
+
 print(today)
 if(ts.is_holiday(today)):
     # print('yes')
@@ -35,7 +36,7 @@ else:
     price_num = 5000
     feature_num = 5000
     down_num = 5000
-    start_date = '2018-05-17'
+    # start_date = '2018-05-17'
     print("price_num: "+str(price_num))
     print("feature_num: "+str(feature_num))
     print("down_num: "+str(down_num))

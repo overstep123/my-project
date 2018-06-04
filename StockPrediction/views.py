@@ -110,7 +110,7 @@ def stockpred(req):
             if(sp.hopeopen == '-'):
                 sp.chg = '-'
             else:
-                sp.chg = float(sp.close)/float(sp.hopeopen) - 1
+                sp.chg = (float(sp.close)/float(sp.hopeopen) - 1)*100
         return render(req,'stockpred.html',{'sps':sps,'username':req.user.username,'url':url})
     else:
         form = AuthenticationForm()
@@ -140,11 +140,13 @@ def predanal(req):
     url='predanal'
     pas = None
     pas = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01').order_by('-buydate')
+    for i in pas:
+        i.chg = (i.chg-1)*100
     return render(req,'predanal.html',{'username':req.user.username,'pas':pas,'url':url})
 
 def winrate_ajax(req):
     wrs = []
-    dates = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01').distinct().values('buydate').order_by('-buydate')
+    dates = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01').distinct().values('buydate').order_by('buydate')
     total_win_count=0
     total_lose_count=0
     for date in dates:
@@ -159,8 +161,8 @@ def winrate_ajax(req):
     return JsonResponse(wrs,safe=False)
 def total_wr_ajax(req):
     wrs = []
-    win = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__gt=1.075).count()
-    lose = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__lt=1.075).count()
+    win = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__gt=1.08).count()
+    lose = models.pred_anal_macdh.objects.filter(buydate__gt='2018-01-01',chg__lt=1.08).count()
     wrs.append({'value':win,'name':'预测成功' })
     wrs.append({'value':lose,'name':'预测失败' })
     print(win,lose)

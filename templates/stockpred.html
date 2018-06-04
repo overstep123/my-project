@@ -32,7 +32,7 @@
                                     </thead>
                                     <tbody>
                                     {% for sp in sps %}
-                                        <tr>
+                                        <tr {% if sp.chg > 8 %} class="danger"{% endif %}>
                                             <th>{{ sp.code }}</th>
                                             <th>{{ sp.stockname }}</th>
                                             <th>{{ sp.date|date:"Y-m-d" }}</th>
