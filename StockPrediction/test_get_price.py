@@ -1,4 +1,5 @@
-from sqlalchemy import create_engine
+# -*- coding: UTF-8 -*-
+from sqlalchemy import *
 import tushare as ts
 import datetime as dt
 import pandas as pd
@@ -7,7 +8,7 @@ import os
 
 def get_price(date_start,date_end,bar,count):
     d1 = dt.datetime.now()
-    engine = create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
+    engine = create_engine('mysql://gupiao:gupiao@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
  # 获取股价 已经使用完毕 禁止更改
 
 

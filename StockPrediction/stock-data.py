@@ -5,7 +5,7 @@ import tushare as ts
 import datetime as dt
 # df = ts.get_tick_data('600848', date='2014-12-22')
 d1 = dt.datetime.now()
-engine = create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
+engine = create_engine('mysql+pymysql://gupiao:gupiao@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
 
 sba = ts.get_stock_basics()
 sba.to_sql('stock_list',engine,if_exists='append')

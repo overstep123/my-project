@@ -5,7 +5,7 @@ import time
 import sqlalchemy as sa
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import talib as ta
 Notifi = True
 result = None
@@ -13,15 +13,15 @@ result = None
 def test_feature(date_after,bar,count):
     d1 = dt.datetime.now()
 
-    engine = sa.create_engine('mysql://root:root@localhost/stocktool?charset=utf8')
-    stock_df = pd.read_sql_query("select DISTINCT code from stockprediction_stock_price;",engine)
+    engine = sa.create_engine('mysql://gupiao:gupiao@localhost/stocktool?charset=utf8')
+    stock_df = pd.read_sql_query("select DISTINCT code from StockPrediction_stock_price;",engine)
     stock_s = pd.Series(stock_df['code']).sort_values()
     stock_list = stock_s.tolist()
     counter = 0
 
     for i in stock_list:
         counter += 1
-        sql_price = "SELECT * FROM stockprediction_stock_price WHERE code = "+i+" and date > '2018-04-01' ORDER BY date;"# 4月1日只是为了缩短预测时获取的数据量，应该是随着时间增加而增加的
+        sql_price = "SELECT * FROM StockPrediction_stock_price WHERE code = "+i+" and date > '2018-04-01' ORDER BY date;"# 4月1日只是为了缩短预测时获取的数据量，应该是随着时间增加而增加的
         price_data = pd.read_sql(sql_price,engine)
         if(price_data.empty):
             print(i)

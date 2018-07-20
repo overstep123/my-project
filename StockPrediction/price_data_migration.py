@@ -6,7 +6,7 @@ import http.client, urllib
 import os
 d1 = dt.datetime.now()
 def get_price(start_date,bar,count): #FIXME:获取股价时 请不要多次运行，数据有可能会重复
-    engine = create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
+    engine = create_engine('mysql://gupiao:gupiao@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
 
     stock_df = pd.read_sql_query("select code,name from stock_list;",engine)# stock_list是指股票列表 记录所有股票的代码以及名称，用于遍历股票代码
     stock_s = pd.Series(stock_df['code']).sort_values()
@@ -20,6 +20,7 @@ def get_price(start_date,bar,count): #FIXME:获取股价时 请不要多次运�
         else:
             df['stockname'] =  stock_df[stock_df['code']==i].name.iloc[0]
             df[['date','open','high','close','low','code','stockname','volume']].to_sql('stockprediction_stock_price',engine,if_exists='append',index=False)#存储数据
+            print("done: "+i)
 
     d2 = dt.datetime.now()#FIXME:记录用时，每个文件都有。
     print("time used: ")
