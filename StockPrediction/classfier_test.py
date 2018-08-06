@@ -27,7 +27,7 @@ def test_classfier(date_after, bar, count, train_times):
 
 
     # 数据获取
-    engine = sa.create_engine('mysql://root:root@localhost/stocktool?charset=utf8')
+    engine = sa.create_engine('mysql://gupiao:gupiao@localhost/stocktool?charset=utf8')
     # sql_train_true      = "SELECT open,close,high,low FROM stock_label_true WHERE date >= '2016-01-01' AND date < '2017-01-01';"
     # sql_train_false     = "SELECT open,close,high,low FROM stock_label_false WHERE date >='2016-01-01' AND date < '2017-01-01';"
     # sql_varify_true     = "SELECT open,close,high,low FROM stock_label_true WHERE date >='2017-01-01';"
@@ -47,9 +47,9 @@ def test_classfier(date_after, bar, count, train_times):
 
 
 
-    sql_train_true      = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi FROM stock_label_3d_rate WHERE date < '2018-01-01' AND (macdh<-1.2 or macdh>0.6) AND rate>1.08 AND rate != -1;"
-    sql_train_false     = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi FROM stock_label_3d_rate WHERE date < '2018-01-01' AND (macdh<-1.2 or macdh>0.6) AND rate<=1.08 AND rate != -1;"
-    sql_test            = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi,code,date FROM stock_price_test_down WHERE date>='"+date_after+"' AND (macdh<-1.2 or macdh>0.6) AND isDown = 1;"
+    sql_train_true      = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi FROM StockPrediction_stock_pred WHERE date < '2018-01-01' AND (macdh<-1.2 or macdh>0.6) AND rate>1.08 AND rate != -1;"
+    sql_train_false     = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi FROM StockPrediction_stock_pred WHERE date < '2018-01-01' AND (macdh<-1.2 or macdh>0.6) AND rate<=1.08 AND rate != -1;"
+    sql_test            = "SELECT macdh,stoK,stoD,rsi,willR,ultosc,mfi,code,date FROM StockPrediction_stock_pred WHERE date>='"+date_after+"' AND (macdh<-1.2 or macdh>0.6) AND isDown = 1;"
     print(sql_test)
     x_train_true        = pd.read_sql_query(sql_train_true, engine)
     x_train_false       = pd.read_sql_query(sql_train_false,engine)
@@ -133,7 +133,7 @@ def test_classfier(date_after, bar, count, train_times):
     l1 = tf.layers.dense(xs,layer1_num,name="l1")
     # l2 = tf.layers.dense(l1,layer2_num,activation=tf.nn.softmax,name="l2")
     # l3 = tf.layers.dense(l2,layer3_num,activation=tf.nn.softmax,name="l3")
-    prediction = tf.layers.dense(l1,output_num,activation=tf.nn.softmax,name="prediction")
+    prediction = tf.layers.dense(l1,output_num,activation=tf.nn.softmax,name="pred")
     loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys-prediction), reduction_indices=[1]))
     train_step = tf.train.GradientDescentOptimizer(train_grad).minimize(loss)
     train_step2 = tf.train.GradientDescentOptimizer(train_grad2).minimize(loss)

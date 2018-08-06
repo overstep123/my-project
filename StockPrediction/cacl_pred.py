@@ -12,10 +12,10 @@ result = None
 
 d1 = dt.datetime.now()
 
-engine = sa.create_engine('mysql://root:root@localhost/stocktool?charset=utf8')
+engine = sa.create_engine('mysql://gupiao:gupiao@localhost/stocktool?charset=utf8')
 
 
-stock_df = pd.read_sql_query("select DISTINCT code from stockprediction_stock_pred;", engine)
+stock_df = pd.read_sql_query("select DISTINCT code from StockPrediction_stock_pred;", engine)
 stock_s = pd.Series(stock_df['code']).sort_values()
 stock_list = stock_s.tolist()
 counter = 0
@@ -23,7 +23,7 @@ counter = 0
 for i in stock_list:
     calc_pred_df = pd.DataFrame(columns=['code','stockname','hopeopen','buydate','hopesale','high','highdate'])
     counter += 1
-    sql_price = "SELECT * FROM stockprediction_stock_pred WHERE code = "+i+" ORDER BY date;"
+    sql_price = "SELECT * FROM StockPrediction_stock_pred WHERE code = "+i+" ORDER BY date;"
     price_data = pd.read_sql(sql_price,engine)
     row_number = price_data.shape[0]
     for j in range(0,row_number):
@@ -42,7 +42,7 @@ for i in stock_list:
                                                              'high':tmp_high,
                                                              'highdate':sub_df[sub_df.high == tmp_high].iloc[0].date}
                 # print(calc_pred_df)
-    calc_pred_df.to_sql('stockprediction_pred_anal_macdh',engine,if_exists='append',index=False)
+    calc_pred_df.to_sql('StockPrediction_pred_anal_macdh',engine,if_exists='append',index=False)
     # iD = pd.DataFrame(np.zeros((price_data.shape[0], 1)), columns=['down'])
 
 """

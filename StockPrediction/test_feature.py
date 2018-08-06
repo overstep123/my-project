@@ -21,7 +21,7 @@ def test_feature(date_after,bar,count):
 
     for i in stock_list:
         counter += 1
-        sql_price = "SELECT * FROM StockPrediction_stock_price WHERE code = "+i+" and date > '2018-04-01' ORDER BY date;"# 4月1日只是为了缩短预测时获取的数据量，应该是随着时间增加而增加的
+        sql_price = "SELECT * FROM StockPrediction_stock_price WHERE code = "+i+" and date > '2018-05-01' ORDER BY date;"# 4月1日只是为了缩短预测时获取的数据量，应该是随着时间增加而增加的
         price_data = pd.read_sql(sql_price,engine)
         if(price_data.empty):
             print(i)
@@ -45,8 +45,8 @@ def test_feature(date_after,bar,count):
                 else:
                     continue
             price_data.insert(price_data.shape[1],'down',iD)
-
-            price_data[price_data.date>=dt.datetime.strptime(date_after,'%Y-%m-%d').date()].to_sql('stockprediction_stock_pred',engine,if_exists='append',index=False)
+            #print(price_data[price_data.date>=dt.datetime.strptime(date_after,'%Y-%m-%d').date()])
+            price_data[price_data.date>=dt.datetime.strptime(date_after,'%Y-%m-%d').date()].to_sql('StockPrediction_stock_pred',engine,if_exists='append',index=False)
             bar.update(count+counter)
 
     # 最终手机提示

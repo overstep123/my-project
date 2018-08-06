@@ -7,9 +7,9 @@ import numpy as np
 
 def test_down(date_after,bar,count):
     d1 = dt.datetime.now()
-    engine = sa.create_engine('mysql://root:root@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
+    engine = sa.create_engine('mysql://gupiao:gupiao@127.0.0.1/stocktool?charset=utf8') # 123.206.69.99 server
     conn = engine.connect()
-    stock_df = pd.read_sql_query("select distinct code from stockprediction_stock_pred;",engine)
+    stock_df = pd.read_sql_query("select distinct code from StockPrediction_stock_pred;",engine)
     stock_s = pd.Series(stock_df['code']).sort_values()
     stock_list = stock_s.tolist()
     counter = 0
@@ -18,7 +18,7 @@ def test_down(date_after,bar,count):
         # print(i)
         # list = []
         # list2= []
-        sql = "SELECT * FROM stockprediction_stock_price WHERE code = "+i+" ORDER BY date;"
+        sql = "SELECT * FROM StockPrediction_stock_price WHERE code = "+i+" ORDER BY date;"
         stock_price_df = pd.read_sql_query(sql,engine)
         # print(stock_price_df)
         # stock_price_UD = pd.DataFrame(np.zeros((stock_price_df.shape[0],1)),columns=['UpOrDown'])
@@ -38,7 +38,7 @@ def test_down(date_after,bar,count):
                 iD.iloc[j].isDown = True
                 # print(stock_price_df.iloc[j].date)
                 # print(type(stock_price_df.iloc[j].date))
-                conn.execute("update stockprediction_stock_pred set down = True where date = '"+str(stock_price_df.iloc[j].date)+"' and "+"code  = "+stock_price_df.iloc[j].code+";")
+                conn.execute("update StockPrediction_stock_pred set down = True where date = '"+str(stock_price_df.iloc[j].date)+"' and "+"code  = "+stock_price_df.iloc[j].code+";")
             else:
                 continue
 

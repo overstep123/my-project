@@ -12,7 +12,7 @@ result = None
 
 d1 = dt.datetime.now()
 
-engine = sa.create_engine('mysql://root:root@localhost/stocktool?charset=utf8')
+engine = sa.create_engine('mysql://gupiao:gupiao@localhost/stocktool?charset=utf8')
 
 
 # stock_df = pd.read_sql_query("select DISTINCT code from stockprediction_stock_pred;", engine)
@@ -24,7 +24,7 @@ counter = 0
 #     print(i)
 calc_pred_df = pd.DataFrame(columns=['code','stockname','hopeopen','buydate','hopesale','high','highdate'])
 counter += 1
-sql_price = "select * from stockprediction_stock_pred where date> '2018-04-24' and date <='2018-05-03' and (macdh > 0.6 or macdh< -1.2) and down = 1;"
+sql_price = "select * from StockPrediction_stock_pred where date> '2018-04-24' and date <='2018-05-03' and (macdh > 0.6 or macdh< -1.2) and down = 1;"
 tmp_data = pd.read_sql(sql_price,engine)
 row_num = tmp_data.shape[0]
 for j in range(0,row_num):
@@ -32,7 +32,7 @@ for j in range(0,row_num):
     tmp_date = tmp_data.iloc[j].date
     # print(type(tmp_date))
 
-    sql_str = "select * from stockprediction_stock_pred where code = "+str(tmp_code)+" and date > '"+tmp_date.strftime("%Y-%m-%d")+"' order by date";
+    sql_str = "select * from StockPrediction_stock_pred where code = "+str(tmp_code)+" and date > '"+tmp_date.strftime("%Y-%m-%d")+"' order by date";
     price_data = pd.read_sql(sql_str,engine)
     # print(price_data)
 # price_data = pd.read_sql(sql_price,engine)
@@ -56,7 +56,7 @@ for j in range(0,row_num):
                                                  'highdate':sub_df[sub_df.high == tmp_high].iloc[0].date}
 # print(calc_pred_df)
     # print(calc_pred_df)
-calc_pred_df.to_sql('stockprediction_pred_anal_macdh',engine,if_exists='append',index=False)
+calc_pred_df.to_sql('StockPrediction_pred_anal_macdh',engine,if_exists='append',index=False)
     # iD = pd.DataFrame(np.zeros((price_data.shape[0], 1)), columns=['down'])
 
 """ 

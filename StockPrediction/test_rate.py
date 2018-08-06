@@ -5,7 +5,7 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 d1 = dt.datetime.now()
-engine = sa.create_engine('mysql://kevin:@127.0.0.1/Stock?charset=utf8') # 123.206.69.99 server
+engine = sa.create_engine('mysql://gupiao:gupiao@127.0.0.1/Stock?charset=utf8') # 123.206.69.99 server
 stock_df = pd.read_sql_query("select code from stock_list;",engine)
 stock_s = pd.Series(stock_df['code']).sort_values()
 stock_list = stock_s.tolist()

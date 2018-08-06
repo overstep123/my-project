@@ -75,3 +75,20 @@ class pred_anal_macdh(models.Model):
     chg = models.DecimalField(decimal_places=15,max_digits=20,null=True)
     class Meta:
         unique_together=('code','buydate')
+
+class stock_change(models.Model):
+    stockname = models.CharField(max_length=6)
+    date = models.DateField()
+    price_change = models.DecimalField(decimal_places=4,max_digits=10)
+    code = models.CharField(max_length=6)
+    class Meta:
+        unique_together=('code','date')
+
+class stock_similar(models.Model):
+    code = models.CharField(max_length=6)
+    stockname = models.CharField(max_length=6)
+    similar_code = models.CharField(max_length=6)
+    similar_name = models.CharField(max_length=6)
+    similar_rate = models.DecimalField(decimal_places=8,max_digits=10)
+    class Meta:
+        unique_together=('code','similar_code')

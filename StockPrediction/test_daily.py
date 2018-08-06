@@ -26,8 +26,8 @@ price_num = price_num_df.iloc[0,0]
 feature_num = feature_num_df.iloc[0,0]
 down_num = down_num_df.iloc[0,0]
 """
-today = dt.datetime.today().strftime('%Y-%m-%d')
-# today = '2018-05-17'
+today = dt.datetime.today().strftime('%Y-%m-%d');
+#today = '2018-07-23'
 
 print(today)
 if(ts.is_holiday(today)):
@@ -37,20 +37,18 @@ else:
     # print('no')
     price_num = 5000
     feature_num = 5000
-    down_num = 5000
-    start_date = '2018-05-17'
+    start_date = '2018-05-25'
     print("price_num: "+str(price_num))
     print("feature_num: "+str(feature_num))
-    print("down_num: "+str(down_num))
-
+    
     # with progressbar.ProgressBar(max_value=price_num+feature_num+down_num+1,redirect_stdout=True) as bar:
-    bar = progressbar.ProgressBar(maxval=price_num+feature_num+down_num+1+train_times).start()
+    bar = progressbar.ProgressBar(maxval=price_num+feature_num+1+train_times).start()
         # test_get_price.get_price(start_date,end_date,bar,count)
     price_data_migration.get_price(today,bar,count)
 
     print('get_price finished')
-    # count = count+int(price_num)
-    test_feature.test_feature(start_date,bar,count)
+    count = count+5000
+    test_feature.test_feature(today,bar,count)
 
     print('feature finished')
     # count = count+int(feature_num)
@@ -58,7 +56,7 @@ else:
 
     print('down finished')
     # count = count+int(down_num)
-    # classfier_test.test_classfier(start_date,bar,count,train_times)
+    #classfier_test.test_classfier(start_date,bar,count,train_times)
 
     print('prediction finished')
 
@@ -67,7 +65,7 @@ else:
       urllib.parse.urlencode({
         "token": "a22vgia8q7vszh4zromzgd2jgikxeh",
         "user": "u6xu8s5vtjz982g9btzrfzm1r6e2q8",
-        "message": "done ！\ntotal_num: "+str(price_num+feature_num+down_num+train_times+1),
+        "message": "done ！\ntotal_num: "+str(price_num+feature_num+train_times+1),
         "title":os.path.basename(__file__),
       }), { "Content-type": "application/x-www-form-urlencoded" })
     conn.getresponse()

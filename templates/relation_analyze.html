@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load staticfiles %}
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        股票相关性分析
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                        </div>
+                        <div class="panel-body {% if not sps %}hidden{% endif %}">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover " id="relationtable">
+                                    <thead>
+                                    <tr>
+                                        <th>股票代码</th>
+                                        <th>股票名称</th>
+                                        <th>最相关股票</th>
+                                        <th>相关度</th>
+                                   </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for sp in sps %}
+                                        <tr {% if ip.chg > 8 %} class="danger"{% endif %}> 
+                                            <th><a href="javascript:todetail('{{ sp.code }}');">{{ sp.code }}</a></th>
+                                            <th>{{ sp.stockname }}</th>
+                                            <th>{{ sp.similar_code }} {{ sp.similar_name }}</th>
+                                            <th>{{ sp.similar_rate }}</th>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
+      <!-- Bootstrap Js -->
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <!-- Metis Menu Js -->
+    <script src="{% static 'assets/js/jquery.metisMenu.js' %}"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{% static 'assets/js/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'assets/js/dataTables/dataTables.bootstrap.js' %}"></script>
+        <script>
+            function todetail(code) {
+                    window.location.href = "/similar_detail?code=" + code
+                }
+            $(document).ready(function () {
+                $('#relationtable').dataTable({
+                    'order':[[2,'desc']],
+                    'oLanguage':{
+                        "sSearch": "搜索:",
+                        "sLengthMenu": "显示 _MENU_ 项结果",
+                        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                        'oPaginate':{
+                            'sFirst':'首页',
+                            'sPrevious':'前一页',
+                            'sNext':'后一页',
+                            'sLast':'尾页'
+                        }
+                    }
+                }
+                );
+            });
+        </script>
+         <!-- Custom Js -->
+    <script src="{% static 'assets/js/custom-scripts.js' %}"></script>
+
+{% endblock %}

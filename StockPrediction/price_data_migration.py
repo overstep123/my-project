@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from sqlalchemy import create_engine
 import tushare as ts
 import datetime as dt
@@ -10,17 +11,22 @@ def get_price(start_date,bar,count): #FIXME:获取股价时 请不要多次运�
 
     stock_df = pd.read_sql_query("select code,name from stock_list;",engine)# stock_list是指股票列表 记录所有股票的代码以及名称，用于遍历股票代码
     stock_s = pd.Series(stock_df['code']).sort_values()
-    stock_list = stock_s.tolist()
-    # counter = 0
+    list1=stock_s.tolist();
+    stock_list = sorted(set(list1),key=list1.index)
+    counter = 0
     for i in stock_list:
-
-        df = ts.get_k_data(i, ktype='D',start=start_date)# 取start_date及以后的价格
-        if(df.empty):# 异常情况数据为空，经常会有报错 可以忽略
-            print("name: "+i)
+        counter += 1;
+        data = pd.DataFrame(ts.get_k_data(i, ktype='D'))
+        if(not 'date' in data.columns):
+            pass;
         else:
-            df['stockname'] =  stock_df[stock_df['code']==i].name.iloc[0]
-            df[['date','open','high','close','low','code','stockname','volume']].to_sql('stockprediction_stock_price',engine,if_exists='append',index=False)#存储数据
-            print("done: "+i)
+            df = data[data.date >= start_date]# 取start_date及以后的价格
+            if(df.empty):# 异常情况数据为空，经常会有报错 可以忽略
+                print("name: "+i)
+                bar.update(count+counter);
+            else:
+                df['stockname'] =  stock_df[stock_df['code']==i].name.iloc[0]
+                df[['date','open','high','close','low','code','stockname','volume']].to_sql('StockPrediction_stock_price',engine,if_exists='append',index=False)#存储数据
 
     d2 = dt.datetime.now()#FIXME:记录用时，每个文件都有。
     print("time used: ")
