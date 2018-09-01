@@ -1,0 +1,142 @@
+
+{% extends 'base.html' %}
+{% block content %}
+    {% load staticfiles %}
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        数据管理
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                        </div>
+                        <div class="panel-body">
+                                 {% csrf_token %}
+                                <div class="col-md-2">
+                                    <label>数据项</label><br>
+                                    <label style="margin-top: 4px">股票行情数据</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>选择日期</label>
+                                    <input id="price_date" class="form-control" type="date" name="date">
+                                </div>
+                                <div class="col-md-1">
+                                    <label> &nbsp;</label>
+                                    <input type="button" onclick="reset_price();" class="form-control btn btn-primary col-2" value="重置">
+                                </div>
+                                <div class="col-md-1">
+                                    <label> 执行结果</label><br>
+                                    <label id="text1" style="margin-top: 4px">>{{ result }}</label>
+                                </div>
+                                <div>
+                                    <label> &nbsp;</label><br>
+                                    <label style="margin-top: 4px">该操作将重置所选日期之后的数据</label>
+                                </div>                                                           
+                         </div>
+                        <div class="panel-body">
+                                 {% csrf_token %}
+                                <div class="col-md-2">
+                                    <label style="margin-top: 4px">股票预测数据</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="pred_date" class="form-control" type="date" name="date">
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="button" onclick="reset_pred();" class="form-control btn btn-primary col-2" value="重置">
+                                </div>
+                                <div class="col-md-1">
+                                    <label id="text2" style="margin-top: 4px">>{{ result }}</label>
+                                </div>
+                                <div>
+                                    <label style="margin-top: 4px">该操作将重置所选日期之后的数据</label>
+                                </div>
+                         </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="{% static 'assets/js/jquery-1.10.2.js' %}"></script>
+      <!-- Bootstrap Js -->
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <!-- Metis Menu Js -->
+    <script src="{% static 'assets/js/jquery.metisMenu.js' %}"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{% static 'assets/js/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'assets/js/dataTables/dataTables.bootstrap.js' %}"></script>
+        <script>
+            function reset_price() {
+                    var date = document.getElementById('price_date').value;
+                    if(document.getElementById('price_date').value == "")
+                    {
+                        alert("请输入日期");
+                        return;
+                    }
+                    else 
+                    {
+                    if(document.getElementById('text1').innerHTML == "执行中")
+                        alert("操作完成前请不要重复点击");
+                    else
+                    {
+                    document.getElementById('text1').innerHTML = "执行中";
+                    $.ajax({
+                        type: "GET",
+                        url: "price_reset",    //后台处理函数的url
+                        data: {"date":date},
+                        success: function (result) {
+                            alert("完成");
+                            document.getElementById('text1').innerHTML = "完成";
+                        },
+                    });
+                    }
+                    }
+                }
+            function reset_pred() {
+                    var date = document.getElementById('pred_date').value;
+                    if(document.getElementById('pred_date').value == "")
+                    {
+                        alert("请输入日期");
+                        return;
+                    }
+                    else
+                    {
+                    if(document.getElementById('text2').innerHTML == "执行中")
+                        alert("操作完成前请不要重复点击");
+                    else
+                    {
+                    document.getElementById('text2').innerHTML = "执行中";
+                    $.ajax({
+                        type: "GET",
+                        url: "pred_reset",    //后台处理函数的url
+                        data: {"date":date},
+                        success: function (result) {
+                            alert("完成");
+                            document.getElementById('text2').innerHTML = "完成";
+                        },
+                    });
+                    }
+                    }
+                }
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- Custom Js -->
+    <script src="{% static 'assets/js/custom-scripts.js' %}"></script>
+
+{% endblock %}
